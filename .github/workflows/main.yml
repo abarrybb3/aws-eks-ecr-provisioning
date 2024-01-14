@@ -17,41 +17,45 @@ jobs:
       TF_VAR_terraform_cloud_token: ${{ secrets.TF_CLOUD_TOKEN }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: us-east-1  # Update with your default region
+      AWS_REGION: us-east-1
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Setup Terraform
-          uses: hashicorp/setup-terraform@v1
-          with:
-            cli_config_credentials_token: ${{ secrets.TF_CLOUD_TOKEN }}
-
-#      - name: Set up Terraform Cloud CLI
-#        run: |
-#          echo -n $TF_VAR_terraform_cloud_token > ~/.terraformrc
-#          chmod 600 ~/.terraformrc
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_CLOUD_TOKEN }}
 
       - name: Terraform Format
         run: |
           cd ${{ matrix.platform }}
-          terraform fmt
+          terraform fmt -check -recursive
 
       - name: Terraform Init
         run: |
           cd ${{ matrix.platform }}
           terraform init
 
-      - name: Terraform plan
+      - name: Terraform Validate
         run: |
           cd ${{ matrix.platform }}
-          terraform plan
+          terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          cd ${{ matrix.platform }}
+          terraform plan -out=tfplan
+        continue-on-error: true
+
+      - name: Approve Changes
+        if: steps.plan.outcome == 'success'
+        run: echo "::set-output name=approve::true"
 
       - name: Terraform Apply
+        if: steps.approve.outputs.approve == 'true'
         run: |
           cd ${{ matrix.platform }}
-          terraform apply -auto-approve
-
-
-
+          terraform apply -auto-approve tfplan
