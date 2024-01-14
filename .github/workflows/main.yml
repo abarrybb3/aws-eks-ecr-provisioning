@@ -23,10 +23,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Terraform Cloud CLI
-        run: |
-          echo -n $TF_VAR_terraform_cloud_token > ~/.terraformrc
-          chmod 600 ~/.terraformrc
+      - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v1
+          with:
+            cli_config_credentials_token: ${{ secrets.TF_CLOUD_TOKEN }}
+
+#      - name: Set up Terraform Cloud CLI
+#        run: |
+#          echo -n $TF_VAR_terraform_cloud_token > ~/.terraformrc
+#          chmod 600 ~/.terraformrc
 
       - name: Terraform Format
         run: |
