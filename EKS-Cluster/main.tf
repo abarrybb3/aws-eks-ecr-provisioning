@@ -12,7 +12,7 @@ terraform {
       source = "hashicorp/aws"
     }
   }
-}
+
 
 
 # IAM Role for EKS to have access to the appropriate resources
