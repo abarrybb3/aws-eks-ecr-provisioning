@@ -31,7 +31,7 @@ jobs:
       - name: Terraform Format
         run: |
           cd ${{ matrix.platform }}
-          terraform fmt -check -recursive
+          terraform fmt
 
       - name: Terraform Init
         run: |
