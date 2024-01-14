@@ -43,12 +43,12 @@ jobs:
           cd ${{ matrix.platform }}
           terraform validate
 
-      - name: Terraform Plan
-        id: plan
-        run: |
-          cd ${{ matrix.platform }}
-          terraform plan -out=tfplan
-        continue-on-error: true
+#      - name: Terraform Plan
+#        id: plan
+#        run: |
+#          cd ${{ matrix.platform }}
+#          terraform plan -out=tfplan
+#        continue-on-error: true
 
       - name: Approve Changes
         if: steps.plan.outcome == 'success'
