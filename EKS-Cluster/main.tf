@@ -67,7 +67,7 @@ resource "aws_eks_cluster" "devops-eks" {
   ]
 }
 
-## Worker Nodes
+## Worker Nodes role
 resource "aws_iam_role" "workernodes" {
   name = "eks-node-group-example"
 
