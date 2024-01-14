@@ -48,8 +48,5 @@ jobs:
           cd ${{ matrix.platform }}
           terraform apply -auto-approve
 
-#  cache:
-#    paths:
-      - '**/.terraform'  # Cache Terraform initialization for faster runs
 
 
