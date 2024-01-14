@@ -1,9 +1,12 @@
 terraform {
-  backend "s3" {
-    bucket = "terraform-state-devopsthehardway"
-    key    = "ecr-terraform.tfstate"
-    region = "us-east-1"
+  cloud {
+    organization = "KSU-MEAN-stack-Project"
+
+    workspaces {
+      name = "EKS-ECR-Provisioning"
+    }
   }
+}
   required_providers {
     aws = {
       source = "hashicorp/aws"

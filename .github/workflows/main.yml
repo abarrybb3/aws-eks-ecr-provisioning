@@ -1,1 +1,55 @@
+name: Terraform Apply
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        platform: [eks, ecr]
+
+    env:
+      TF_VAR_terraform_cloud_token: ${{ secrets.TF_CLOUD_TOKEN }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-east-1  # Update with your default region
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform Cloud CLI
+        run: |
+          echo -n $TF_VAR_terraform_cloud_token > ~/.terraformrc
+          chmod 600 ~/.terraformrc
+
+      - name: Terraform Format
+        run: |
+          cd ${{ matrix.platform }}
+          terraform fmt
+
+      - name: Terraform Init
+        run: |
+          cd ${{ matrix.platform }}
+          terraform init
+
+      - name: Terraform plan
+        run: |
+          cd ${{ matrix.platform }}
+          terraform plan
+
+      - name: Terraform Apply
+        run: |
+          cd ${{ matrix.platform }}
+          terraform apply -auto-approve
+
+#  cache:
+#    paths:
+      - '**/.terraform'  # Cache Terraform initialization for faster runs
+
 
