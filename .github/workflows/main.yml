@@ -58,4 +58,4 @@ jobs:
         if: steps.approve.outputs.approve == 'true'
         run: |
           cd ${{ matrix.platform }}
-          terraform destroy -auto-approve tfplan
+          terraform apply -auto-approve tfplan
