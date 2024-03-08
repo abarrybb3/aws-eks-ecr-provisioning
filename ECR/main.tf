@@ -18,8 +18,8 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_ecr_repository" "devops-ecr-repo" {
-  name                 = var.repo_name
+resource "aws_ecr_repository" "devops-ecr-registry" {
+  name                 = var.registry_name
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {

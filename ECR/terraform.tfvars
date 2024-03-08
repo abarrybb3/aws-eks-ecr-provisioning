@@ -1,1 +1,1 @@
-repo_name = "devops-ecr"
+registry_name = "devops-ecr"
